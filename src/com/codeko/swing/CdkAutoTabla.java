@@ -28,7 +28,7 @@ public @interface CdkAutoTabla {
     boolean autoTitulo() default true;
     /**
      * Define el archivo de recursos para la traducción del artículo
-     * @return
+     * @return String Ruta al archivo de recursos
      */
     String archivoRecursos() default "";
     /**
@@ -39,7 +39,7 @@ public @interface CdkAutoTabla {
 
     /**
      * Indica el número de padres que se debe ascender en busca de propiedades
-     * @return
+     * @return boolean True para procesar el padre, false para no hacerlo
      */
     boolean procesarPadre() default false;
 }

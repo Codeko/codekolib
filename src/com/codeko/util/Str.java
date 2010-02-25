@@ -1,6 +1,7 @@
 package com.codeko.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -119,10 +120,10 @@ public class Str {
      * Repite una cadena un número determinado de veces usando el separador indicado.
      * Si repeticiones es menor que 0 se considerará 0.
      * Si la cadena es nula se la considera cadena vacia.
-     * @param cadena
-     * @param repeticiones
-     * @param separador
-     * @return
+     * @param cadena Cadena a repetir
+     * @param repeticiones Número de repeticiones
+     * @param separador Separador usado entre las repeticiones de la cadena
+     * @return String cadena repetida usando el separador indicado
      */
     public static String repetir(String cadena, int repeticiones, String separador) {
         cadena = noNulo(cadena);
@@ -245,13 +246,14 @@ public class Str {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
         StringBuilder sb = new StringBuilder();
         try {
-            //TODO Esta función tiene algún tipo de error que hace que no se copie bien el stream al str
             char[] buff = new char[1024];
-            while ((reader.read(buff)) > -1) {
-                sb.append(buff);
+            int leido = reader.read(buff);
+            while (leido > -1) {
+                sb.append(buff, 0, leido);
+                leido = reader.read(buff);
             }
         } catch (Exception e) {
-            Logger.getLogger(Str.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Str.class.getName()).log(Level.SEVERE, "Error leyendo InputStream", e);
         }
         Obj.cerrar(is);
         return sb.toString();

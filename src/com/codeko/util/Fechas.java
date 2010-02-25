@@ -138,7 +138,7 @@ public class Fechas {
 
     /**
      * Asigna el formato de fecha que se usará para formatear fechas por esta clase
-     * @see getFormatoFechaPorDefecto()
+     * @see Fechas#getFormatoFechaPorDefecto()
      * @param formato Formato de fecha según DateFormat
      */
     public static void setFormatoFechaPorDefecto(String formato) {
@@ -158,7 +158,7 @@ public class Fechas {
 
     /**
      * Asigna el formato de fecha que se usará para formatear fechas para base de datos por esta clase
-     * @see getFormatoFechaBD()
+     * @see Fechas#getFormatoFechaBD() 
      * @param formato Formato de fecha según DateFormat
      */
     public static void setFormatoFechaBD(String formato) {

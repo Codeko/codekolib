@@ -276,7 +276,7 @@ public class Archivo {
 
     /**
      * Añade un archivo al final de otro
-     * @param archivos Archivos a concatenar
+     * @param archivo Archivos a concatenar
      * @param destino Archivo al que se le añadirá el anterior
      * @return true si el proceso se produce correctamente false si no.
      * @throws java.io.IOException
