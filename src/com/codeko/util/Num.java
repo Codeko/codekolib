@@ -20,16 +20,17 @@ public class Num {
     private static Level level = Level.FINEST;
 
     /**
-     * Convierte objetos en enteros
+     * Convierte objetos en enteros.
      * @param obj Objeto a convertir en entero
      * @return La conversión a entero del objeto o 0 si no se ha podido convertir
+     * @see Num#getInt(java.lang.Object, int) 
      */
     public static int getInt(Object obj) {
         return getInt(obj, 0);
     }
 
     /**
-     * Convierte objetos en enteros
+     * Convierte objetos en enteros. Es capaz de convertir cualquier tipo de Number a Integer y para el resto de objetos se usa Integer.parseInt(obj.toString().trim())
      * @param obj Objeto a convertir en entero
      * @param porDefecto Valor que tomará el entero si no se puede convertir el objeto
      * @return La conversión a entero del objeto o el valor por defecto si no se ha podido convertir
@@ -388,7 +389,7 @@ public class Num {
             if (tamanoEnBytes > 1024) {
                 double megas = tamanoEnBytes / 1024.0;
                 if (megas > 1024) {
-                    double gigas=megas/1024.0;
+                    double gigas = megas / 1024.0;
                     st = Num.round(gigas, 2) + "GB";
                 } else {
                     st = Num.round(megas, 2) + "MB";

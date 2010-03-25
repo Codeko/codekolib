@@ -1,7 +1,7 @@
 package com.codeko.util;
 
 /**
- *
+ * Gestiona todo tipo de operaciones comunes relacionadas con el Sistema operativo
  * @author codeko
  */
 public class OS {

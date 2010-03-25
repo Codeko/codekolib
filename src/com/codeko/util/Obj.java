@@ -68,7 +68,7 @@ public class Obj {
     /**
      * Cierra un recurso. Actualmente cierra:
      * <ul>
-     * <li>Todos los objetos que implementen la interfaz java.io.Closeable</li>
+     * <li>Todos los objetos que implementen la interfaz java.io.Closeable (Lo que incluye todos los InputStream,OutputStream,Writers,Readers...)</li>
      * <li>Todos los objetos que implementen la interfaz java.sql.Connection</li>
      * <li>Todos los objetos que implementen la interfaz java.sql.Statement</li>
      * <li>Todos los objetos que implementen la interfaz java.sql.ResultSet</li>

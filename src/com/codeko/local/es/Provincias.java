@@ -7,6 +7,7 @@ import java.util.HashMap;
  * Copyright Codeko Informática 2008
  * www.codeko.com
  * @author Codeko
+ * Diversas utilidades relacionadas con las provincias españolas
  */
 public class Provincias {
 
@@ -70,11 +71,20 @@ public class Provincias {
         }
         return provincias;
     }
-
+    /**
+     * Recupera el nombre de una provincia según el código de esta.
+     * @param cod
+     * @return
+     */
     public static String getProvincia(int cod) {
         return getProvincias().get(cod);
     }
 
+    /**
+     * Recupera el nombre de la provincia a la que pertenece un código postal.
+     * @param cp
+     * @return
+     */
     public static String getProvincia(String cp) {
         int cod = Num.getInt((cp.trim()+"  ").substring(0, 2));
         return getProvincia(cod);

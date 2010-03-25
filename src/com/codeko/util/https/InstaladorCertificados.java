@@ -24,10 +24,10 @@ import javax.net.ssl.X509TrustManager;
  * Copyright Codeko Informática 2008
  * www.codeko.com
  * @author Codeko
+ * Instala automáticamente un el certificado ssl de la url provista para que se puedan realizar conexiones a esa url.
  */
 public class InstaladorCertificados {
 
-    //keytool -genkey -alias zmCli -keypass ZmCliSrv -keystore zmCliSrv -storepass ZmCliSrv
     private static CodekoKeyStore keyStore = null;
 
     public static CodekoKeyStore getKeyStore() {
@@ -119,7 +119,7 @@ public class InstaladorCertificados {
             out.close();
             Logger.getLogger(InstaladorCertificados.class.getName()).fine(cert.toString());
             Logger.getLogger(InstaladorCertificados.class.getName()).info("Certificado añadido al keystore '" + getKeyStore().getArchivoKeyStore().getName() + "' usando el alia '" + alias + "'");
-        }catch(Exception e){
+        } catch (Exception e) {
             Logger.getLogger(InstaladorCertificados.class.getName()).log(Level.WARNING, "Error recuperando certificado", e);
         }
     }
@@ -133,14 +133,17 @@ public class InstaladorCertificados {
             this.tm = tm;
         }
 
+        @Override
         public X509Certificate[] getAcceptedIssuers() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
             this.chain = chain;
             tm.checkServerTrusted(chain, authType);

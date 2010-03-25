@@ -19,8 +19,7 @@ import java.awt.image.PixelGrabber;
 import java.awt.image.VolatileImage;
 
 /**
- * http://www.codeko.com
- * codeko@codeko.com
+ * Clase encargarda de gestionar operaciones comunes con imágenes.
  * @author Boris Burgos García.Codeko Informática 2007
  * @version 0.3
  * 12/08/2008
@@ -98,18 +97,14 @@ public class Img {
         BufferedImage ret = img;
         int w, h;
         if (higherQuality) {
-            // Use multi-step technique: start with original size, then
-            // scale down in multiple passes with drawImage()
-            // until the target size is reached
+            // Se usa la técnica de múltiples pasos. Se va cambiando el tamaño de la imagen progresivamente
             w = img.getWidth();
             h = img.getHeight();
         } else {
-            // Use one-step technique: scale directly from original
-            // size to target size with a single drawImage() call
+            //Se usa la técnica de un sólo paso, se escala la imagen directamente a su tamaño final
             w = targetWidth;
             h = targetHeight;
         }
-
         do {
             if (higherQuality && w > targetWidth) {
                 w /= 2;
@@ -134,7 +129,7 @@ public class Img {
     }
 
     /**
-     * Convierte la imagen dada a blnaco y negro.
+     * Convierte la imagen dada a blanco y negro.
      * No hace una conversión de gran calidad
      * @param original
      * @return BufferedImage
@@ -171,6 +166,11 @@ public class Img {
         return escala;
     }
 
+    /**
+     * Convierte un objeto Image a BufferedImage
+     * @param image Imagen
+     * @return BufferedImage
+     */
     public static BufferedImage toBufferedImage(final Image image) {
         int transparency = Transparency.OPAQUE;
         if (tieneTransparencias(image)) {
@@ -179,6 +179,12 @@ public class Img {
         return toBufferedImage(image, transparency);
     }
 
+    /**
+     * Convierte un objeto Image a BufferedImage especificando si la imagen tiene transparencias o no.
+     * @param image Image a convertir
+     * @param type Alguno de los valores Transparency.BITMASK o Transparency.OPAQUE
+     * @return BufferedImage
+     */
     public static BufferedImage toBufferedImage(final Image image, final int type) {
         if (image instanceof BufferedImage) {
             return (BufferedImage) image;

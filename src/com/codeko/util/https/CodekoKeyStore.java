@@ -12,6 +12,7 @@ import java.util.logging.Logger;
  * Copyright Codeko Informática 2008
  * www.codeko.com
  * @author Codeko
+ * Gestiona un archivo keystore temporal para usar de cara a las conexiónes SSL sin interferir con el keystore del usuario.
  */
 //TODO Sería interesante poder mantener el archivo de certificados entre ejecuciones
 public class CodekoKeyStore {
