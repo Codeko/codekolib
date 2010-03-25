@@ -146,13 +146,17 @@ public class Str {
      * @param separador Separador a usar
      * @return Cadena resultante
      */
+    public static String implode(Collection datos, String separador) {
+        return implode(datos, separador, "");
+    }
+
     /**
-     * Genera una cadena con los elementos de un collection separándolos con un separador
-     * @param datos Colección de datos
+     * Genera una cadena con los elementos de un array separándolos con un separador
+     * @param datos Array de datos
      * @param separador Separador a usar
      * @return Cadena resultante
      */
-    public static String implode(Collection datos, String separador) {
+    public static String implode(Object[] datos, String separador) {
         return implode(datos, separador, "");
     }
 
@@ -166,6 +170,31 @@ public class Str {
     public static String implode(Collection datos, String separador, String valorVacio) {
         StringBuilder sb = new StringBuilder();
         if (datos.size() > 0) {
+            boolean primero = true;
+            for (Object obj : datos) {
+                if (primero) {
+                    primero = false;
+                } else {
+                    sb.append(separador);
+                }
+                sb.append(obj);
+            }
+        } else {
+            sb.append(valorVacio);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Genera una cadena con los elementos de un array separándolos con un separador
+     * @param datos Array de datos
+     * @param separador Separador a usar
+     * @param valorVacio Valor que debe devolver cuando el array está vacio
+     * @return Cadena resultante
+     */
+    public static String implode(Object[] datos, String separador, String valorVacio) {
+        StringBuilder sb = new StringBuilder();
+        if (datos.length > 0) {
             boolean primero = true;
             for (Object obj : datos) {
                 if (primero) {
@@ -202,6 +231,11 @@ public class Str {
         return contenido.toString();
     }
 
+    /**
+     * Convierte un array de bytes a una cadena hexadecimal.
+     * @param bytes Array de bytes a convertir
+     * @return String con el array de bytes convertido a hexadecimal
+     */
     public static String toHexString(byte[] bytes) {
         final char[] HEXDIGITS = "0123456789abcdef".toCharArray();
         StringBuilder sb = new StringBuilder(bytes.length * 3);
@@ -211,7 +245,7 @@ public class Str {
             sb.append(HEXDIGITS[b & 15]);
         }
         /**
-         * Probar las dos implementaciones y ver cual es la mas rapida
+         * TODO Probar las dos implementaciones y ver cual es la mas rapida
          * StringBuffer hexString = new StringBuffer();
         for (int i = 0; i < messageDigest.length; i++) {
         hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
@@ -220,6 +254,11 @@ public class Str {
         return sb.toString();
     }
 
+    /**
+     * Comprime una cadena con Deflate
+     * @param cadena Cadena a comprimir
+     * @return String con la cadena comprimida
+     */
     public static String comprimirDeflate(String cadena) {
         byte[] in = cadena.getBytes();
         Deflater compresser = new Deflater();
@@ -236,12 +275,17 @@ public class Str {
             bos.close();
         } catch (IOException e) {
         }
-
-        // Get the compressed data
         byte[] compressedData = bos.toByteArray();
         return new String(compressedData);
     }
 
+    /**
+     * Convierte un InputStream a una cadena con el charset especificado.
+     * @param is  InputStream a convertir
+     * @param charset Charset de destino
+     * @return String con la cadena resultante en la codificación especificada
+     * @throws UnsupportedEncodingException Lanzado si el charset especificado no es válido
+     */
     public static String toStr(InputStream is, String charset) throws UnsupportedEncodingException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
         StringBuilder sb = new StringBuilder();
@@ -259,6 +303,11 @@ public class Str {
         return sb.toString();
     }
 
+    /**
+     * Comprime una cadena en gz
+     * @param cadena Cadena a comprimir
+     * @return String con la cadena comprimida en Gz. Si se produce algún error se devuelve la cadena original
+     */
     public static String comprimirGZ(String cadena) {
         String ret = cadena;
         ByteArrayOutputStream byos = new ByteArrayOutputStream();

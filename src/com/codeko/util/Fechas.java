@@ -10,7 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Utilidades de fechas
+ * Utilidades de formateo, comparación y análisis de fechas así como de
+ * conversión de fechas entre los distintas clases de java.
  * @author codeko
  * @version 1.0.1
  * 12/08/2008
@@ -18,9 +19,11 @@ import java.util.logging.Logger;
 public class Fechas {
 
     /**
-     * Formatea una fecha según un formato por defecto. Este formato esta definido en la propiedad del sistema com.codeko.util.fechas.formatoFecha
+     * Formatea una fecha según un formato por defecto.<br/>
+     * Este formato esta definido en la propiedad del sistema "com.codeko.util.fechas.formatoFecha"
      * @param cal Fecha a formatear, puede ser un objeto Calendar, un Objeto date o una cadena de texto con el formato por defecto.
-     * @return String con la fecha formateada o cadena vacia si la fecha es nula
+     * @return String con la fecha formateada o cadena vacia si la fecha es nula o no es procesable
+     * @see Fechas#setFormatoFechaPorDefecto(java.lang.String) 
      */
     public static String format(Object cal) {
         if (cal != null) {
@@ -36,10 +39,10 @@ public class Fechas {
     }
 
     /**
-     * Formatea una fecha según un formato @see SimpleDateFormat.
+     * Formatea una fecha según un formato.
      * @param cal Fecha a formatear, puede ser un objeto Calendar, un Objeto date o una cadena de texto con el formato por defecto.
-     * @param formato Formato de la fecha
-     * @return String con la fecha formateada o cadena vacia si la fecha es nula
+     * @param formato Formato de la fecha @see java.text.SimpleDateFormat
+     * @return String con la fecha formateada o cadena vacia si la fecha es nula o no es procesable
      */
     public static String format(Object cal, String formato) {
         if (cal != null) {
@@ -55,9 +58,11 @@ public class Fechas {
     }
 
     /**
-     * Formatea una fecha según un formato por defecto. Este formato esta definido en la propiedad del sistema com.codeko.util.fechas.formatoFecha
+     * Formatea una fecha según un formato por defecto.<br/>
+     * Este formato esta definido en la propiedad del sistema "com.codeko.util.fechas.formatoFecha"
      * @param cal Fecha a formatear
-     * @return String con la fecha formateada o cadena vacia si la fecha es nula
+     * @return String con la fecha formateada o cadena vacia si la fecha es nula o no es procesable
+     * @see Fechas#setFormatoFechaPorDefecto(java.lang.String) 
      */
     public static String format(Calendar cal) {
         if (cal != null) {
@@ -67,10 +72,10 @@ public class Fechas {
     }
 
     /**
-     * Formatea una fecha según el formato dado @see SimpleDateFormat
+     * Formatea una fecha según el formato dado.
      * @param cal Fecha a formatear
-     * @param formato Formato de la fecha
-     * @return String con la fecha formateada o cadena vacia si la fecha es nula
+     * @param formato Formato de la fecha @see java.text.SimpleDateFormat
+     * @return String con la fecha formateada o cadena vacia si la fecha es nula o no es procesable
      */
     public static String format(Calendar cal, String formato) {
         String ret = "";
@@ -81,10 +86,10 @@ public class Fechas {
     }
 
     /**
-     * Formatea una fecha según el formato dado @see SimpleDateFormat
+     * Formatea una fecha según el formato dado.
      * @param date Fecha a formatear
-     * @param formato Formato de la fecha
-     * @return String con la fecha formateada
+     * @param formato Formato de la fecha @see java.text.SimpleDateFormat
+     * @return String con la fecha formateada o cadena vacia si la fecha es nula o no es procesable
      */
     public static String format(Date date, String formato) {
         SimpleDateFormat sdf = new SimpleDateFormat(formato, Locale.getDefault());
@@ -92,29 +97,32 @@ public class Fechas {
     }
 
     /**
-     * Formatea una fecha según un formato por defecto. Este formato esta definido en la propiedad del sistema com.codeko.util.fechas.formatoFecha
+     * Formatea una fecha según un formato por defecto.<br/>
+     * Este formato esta definido en la propiedad del sistema "com.codeko.util.fechas.formatoFecha"
      * @param date Fecha a formatear
-     * @return String con la fecha formateada
+     * @return String con la fecha formateada o cadena vacia si la fecha es nula o no es procesable
+     * @see Fechas#setFormatoFechaPorDefecto(java.lang.String)
      */
     public static String format(Date date) {
         return format(date, getFormatoFechaPorDefecto());
     }
 
     /**
-     * Analiza una cadena de texto esperando el formato de fecha por defecto.
-     * Este formato esta definido en la propiedad del sistema com.codeko.util.fechas.formatoFecha
+     * Analiza una cadena de texto esperando el formato de fecha por defecto.<br/>
+     * Este formato esta definido en la propiedad del sistema "com.codeko.util.fechas.formatoFecha"
      * @param fecha Cadena de texto con el formato de fecha por defecto
      * @return Date fecha de la cadena en formato Date o null si se produce algún error analizando la fecha
+     * @see Fechas#setFormatoFechaPorDefecto(java.lang.String)
      */
     public static Date parse(String fecha) {
         return parse(fecha, getFormatoFechaPorDefecto());
     }
 
     /**
-     * Analiza una fecha dada según un formato de fecha dado
+     * Analiza una fecha dada según un formato de fecha dado.
      * @param fecha Cadena de texto con la fecha en el formato dado
-     * @param formato Formato de la fecha dada
-     * @return Date fecha de la cadena como Objeto date o null si se produce algún error analizando la fecha
+     * @param formato Formato de la fecha dada @see java.text.SimpleDateFormat
+     * @return Date fecha de la cadena como Objeto Date o null si se produce algún error analizando la fecha
      */
     public static Date parse(String fecha, String formato) {
         SimpleDateFormat sdf = new SimpleDateFormat(formato, Locale.getDefault());
@@ -127,39 +135,42 @@ public class Fechas {
     }
 
     /**
-     * Devuelve el formato de fecha usado por esta clase a la hora de formatear fechas
-     * Por defecto el formato es "dd/MM/yyyy".
-     * Internamente se almacena en la variable de sistema "com.codeko.util.fechas.formatoFecha"
+     * Devuelve el formato de fecha usado por esta clase a la hora de formatear fechas.<br/>
+     * Por defecto el formato es "dd/MM/yyyy".<br/>
+     * Internamente se almacena en la variable de sistema "com.codeko.util.fechas.formatoFecha"<br/>
      * @return Formato de fecha según DateFormat
+     * @see java.text.SimpleDateFormat
      */
     public static String getFormatoFechaPorDefecto() {
         return System.getProperty("com.codeko.util.fechas.formatoFecha", "dd/MM/yyyy");
     }
 
     /**
-     * Asigna el formato de fecha que se usará para formatear fechas por esta clase
-     * @see Fechas#getFormatoFechaPorDefecto()
+     * Asigna el formato de fecha que se usará para formatear fechas por esta clase.
      * @param formato Formato de fecha según DateFormat
+     * @see Fechas#getFormatoFechaPorDefecto()
+     * @see java.text.SimpleDateFormat
      */
     public static void setFormatoFechaPorDefecto(String formato) {
         System.setProperty("com.codeko.util.fechas.formatoFecha", formato);
     }
 
     /**
-     * Devuelve el formato de fecha usado por esta clase a la hora de formatear fechas para base de datos
-     * Por defecto el formato es "yyyy-MM-dd" usado por MySQL.
+     * Devuelve el formato de fecha usado por esta clase a la hora de formatear fechas para base de datos.<br/>
+     * Por defecto el formato es "yyyy-MM-dd" usado por MySQL.<br/>
      * Internamente se almacena en la variable de sistema "com.codeko.util.fechas.formatoFechaBD"
      * @return Formato de fecha según DateFormat
+     * @see java.text.SimpleDateFormat
      */
-    public static String getFormatoFechaBD(){
+    public static String getFormatoFechaBD() {
         return System.getProperty("com.codeko.util.fechas.formatoFechaBD", "yyyy-MM-dd");
     }
 
-
     /**
-     * Asigna el formato de fecha que se usará para formatear fechas para base de datos por esta clase
-     * @see Fechas#getFormatoFechaBD() 
+     * Asigna el formato de fecha que se usará para formatear fechas para base de datos por esta clase.
      * @param formato Formato de fecha según DateFormat
+     * @see Fechas#getFormatoFechaBD()
+     * @see java.text.SimpleDateFormat
      */
     public static void setFormatoFechaBD(String formato) {
         System.setProperty("com.codeko.util.fechas.formatoFechaBD", formato);

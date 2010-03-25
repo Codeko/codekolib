@@ -9,53 +9,84 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Codifica distintos origenes a base64
+ * Codifica distintos origenes de datos a base64
  * @author Codeko
  */
 public class Base64 {
 
     private final static String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    private static boolean cortarLineas = true;
     private static boolean saltosDeLineaLinux = false;
     private static int caracteresPorLinea = 76;
 
+    /**
+     * Devuelve el número de caracteres por linea que se permitirán en la versión codificada en base64.
+     * Por defecto son 76 caracteres por linea.
+     * @return int con el número de caracteres por linea
+     */
     public static int getCaracteresPorLinea() {
         return caracteresPorLinea;
     }
 
+    /**
+     * Asigna el  número de caracteres por linea que se permitirán en la versión codificada en base64.
+     * Por defecto son 76 caracteres por linea.
+     * @param caracteresPorLinea int con el número de caracteres por linea deseados.
+     */
     public static void setCaracteresPorLinea(int caracteresPorLinea) {
         Base64.caracteresPorLinea = caracteresPorLinea;
     }
 
-    public static boolean isCortarLineas() {
-        return cortarLineas;
-    }
-
-    public static void setCortarLineas(boolean cortarLineas) {
-        Base64.cortarLineas = cortarLineas;
-    }
-
+    /**
+     * Devuelve si se usarán saltos de linea linux (\n) en vez de saltos de linea de windows (\r\n).
+     * Por defecto se devuelven saltos de linea de windows.
+     * @return boolean true si se usarán saltos de linea linux o false si serán saltos de linea windows
+     */
     public static boolean isSaltosDeLineaLinux() {
         return saltosDeLineaLinux;
     }
 
+    /**
+     * Asigna si se usarán saltos de linea linux (\n) en vez de saltos de linea de windows (\r\n).
+     * Por defecto se usan saltos de linea de windows.
+     * @param saltosDeLineaLinux boolean true si se usarán saltos de linea linux o false si serán saltos de linea windows
+     */
     public static void setSaltosDeLineaLinux(boolean saltosDeLineaLinux) {
         Base64.saltosDeLineaLinux = saltosDeLineaLinux;
     }
 
-    public static void encode(InputStream is, OutputStream os, boolean cortarLineas, boolean saltosDeLineaLinux) throws IOException {
-        encode(is, os, cortarLineas, saltosDeLineaLinux, getCaracteresPorLinea());
+    /**
+     * Escribe un InputStream en el OutputStream indicado asignado los saltos de linea indicados y el número de caracteres por linea por defecto.
+     * @param is InputStream desde el que se leeran los datos
+     * @param os OutputStream donde se escribirán los datos codificados en base64
+     * @param saltosDeLineaLinux boolean true si se deben usar saltos de linea linux (\n) false si se deben usar los saltos de linea windows (\r\n)
+     * @throws IOException Lanzada si se produce algún problema leyendo del InputStream o escribiendo en el OutputStream
+     * @see Base64#setCaracteresPorLinea(int) 
+     */
+    public static void encode(InputStream is, OutputStream os, boolean saltosDeLineaLinux) throws IOException {
+        encode(is, os, saltosDeLineaLinux, getCaracteresPorLinea());
     }
 
-    public static void encode(InputStream is, OutputStream os, boolean cortarLineas) throws IOException {
-        encode(is, os, cortarLineas, isSaltosDeLineaLinux(), getCaracteresPorLinea());
-    }
-
+    /**
+     * Escribe un InputStream en el OutputStream indicado asignando los saltos de linea y número de caracteres por linea por defecto.
+     * @param is InputStream desde el que se leeran los datos
+     * @param os OutputStream donde se escribirán los datos codificados en base64
+     * @throws IOException Lanzada si se produce algún problema leyendo del InputStream o escribiendo en el OutputStream
+     * @see Base64#setSaltosDeLineaLinux(boolean)
+     * @see Base64#setCaracteresPorLinea(int)
+     */
     public static void encode(InputStream is, OutputStream os) throws IOException {
-        encode(is, os, isCortarLineas(), isSaltosDeLineaLinux(), getCaracteresPorLinea());
+        encode(is, os, isSaltosDeLineaLinux(), getCaracteresPorLinea());
     }
 
-    public static void encode(InputStream is, OutputStream os, boolean cortarLineas, boolean saltosDeLineaLinux, int caracteresPorLinea) throws IOException {
+    /**
+     * Escribe los datos proporcionados por un InputStream en un OutputStream usando el número de caracteres por linea y el salto de linea indicados.
+     * @param is InputStream desde el que se leeran los datos
+     * @param os OutputStream donde se escribirán los datos codificados en base64
+     * @param saltosDeLineaLinux boolean true si se deben usar saltos de linea linux (\n) false si se deben usar los saltos de linea windows (\r\n)
+     * @param caracteresPorLinea Número de caracteres por linea que se escribiran.
+     * @throws IOException Lanzada si se produce algún problema leyendo del InputStream o escribiendo en el OutputStream
+     */
+    public static void encode(InputStream is, OutputStream os, boolean saltosDeLineaLinux, int caracteresPorLinea) throws IOException {
         int leidos = 0;
         int totalLeidos = 0;
         byte[] bytes = new byte[3];
@@ -111,11 +142,19 @@ public class Base64 {
         }
     }
 
+    /**
+     * Codifica un array de bytes en base64 y lo devuelve como String.<br/>
+     * Usa tanto los saltos de linea como el número de caracteres por linea por defecto
+     * @param bytes Array de bytes a codificar.
+     * @return String con el array de bytes codificado en base64.
+     * @see Base64#setSaltosDeLineaLinux(boolean)
+     * @see Base64#setCaracteresPorLinea(int)
+     */
     public static String encode(byte[] bytes) {
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            encode(bais, out, isCortarLineas(), isSaltosDeLineaLinux(), getCaracteresPorLinea());
+            encode(bais, out, isSaltosDeLineaLinux(), getCaracteresPorLinea());
         } catch (IOException ex) {
             Logger.getLogger(Base64.class.getName()).log(Level.SEVERE, "Error accediendo a I/O", ex);
         }
@@ -123,59 +162,12 @@ public class Base64 {
     }
 
     /**
-     * Codifica un array de bytes
-     * 
-     * @param bytes Array de bytes para ser codificado. 
-     * @return Cadena codificada. 
-     */
-//    public static String encode(byte[] bytes) {
-//        StringBuffer tmp = new StringBuffer();
-//        int i = 0;
-//        byte pos;
-//        for (i = 0; i < (bytes.length - bytes.length % 3); i += 3) {
-//            pos = (byte) ((bytes[i] >> 2) & 63);
-//            tmp.append(caracteres.charAt(pos));
-//
-//            pos = (byte) (((bytes[i] & 3) << 4) + ((bytes[i + 1] >> 4) & 15));
-//            tmp.append(caracteres.charAt(pos));
-//
-//            pos = (byte) (((bytes[i + 1] & 15) << 2) + ((bytes[i + 2] >> 6) & 3));
-//            tmp.append(caracteres.charAt(pos));
-//
-//            pos = (byte) (((bytes[i + 2]) & 63));
-//            tmp.append(caracteres.charAt(pos));
-//
-//            // Añade una nueva linea cada 76 caracteres 
-//            // 76*3/4 = 57
-//            if (((i + 2) % 56) == 0) {
-//                tmp.append("\r\n");
-//            }
-//        }
-//
-//        if (bytes.length % 3 != 0) {
-//            if (bytes.length % 3 == 2) {
-//                pos = (byte) ((bytes[i] >> 2) & 63);
-//                tmp.append(caracteres.charAt(pos));
-//                pos = (byte) (((bytes[i] & 3) << 4) + ((bytes[i + 1] >> 4) & 15));
-//                tmp.append(caracteres.charAt(pos));
-//                pos = (byte) ((bytes[i + 1] & 15) << 2);
-//                tmp.append(caracteres.charAt(pos));
-//                tmp.append("=");
-//            } else if (bytes.length % 3 == 1) {
-//                pos = (byte) ((bytes[i] >> 2) & 63);
-//                tmp.append(caracteres.charAt(pos));
-//                pos = (byte) ((bytes[i] & 3) << 4);
-//                tmp.append(caracteres.charAt(pos));
-//                tmp.append("==");
-//            }
-//        }
-//        return tmp.toString();
-//    }
-    /**
-     * Codifica una cadena de texto. 
-     * 
+     * Codifica una cadena de texto en base64. <br/>
+     * Usa tanto los saltos de linea como el número de caracteres por linea por defecto.
      * @param src Cadena de texto a ser codificada a base64. 
-     * @return Cadena de texto codificada. 
+     * @return String Cadena de texto codificada en base64.
+     * @see Base64#setSaltosDeLineaLinux(boolean)
+     * @see Base64#setCaracteresPorLinea(int)
      */
     public static String encode(String src) {
         return encode(src.getBytes());
@@ -185,7 +177,7 @@ public class Base64 {
      * Decodifica una cadena de texto en base64
      * @param src Cadena de texto en base64
      * @return Array de bytes decodificados
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception Si se produce alguna excepción en el proceso (datos inválidos...).
      */
     public static byte[] decode(String src) throws Exception {
         byte[] bytes = null;
@@ -254,8 +246,6 @@ public class Base64 {
         return newBytes;
     }
 
-    
-    
     /**
      * Recupera la posición de un caracter en la tabla de caracteres
      * @param c Caracter
