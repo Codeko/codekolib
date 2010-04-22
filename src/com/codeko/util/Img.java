@@ -95,36 +95,38 @@ public class Img {
     public static BufferedImage getScaledInstance(BufferedImage img, int targetWidth, int targetHeight, boolean higherQuality) {
         int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
         BufferedImage ret = img;
-        int w, h;
-        if (higherQuality) {
-            // Se usa la técnica de múltiples pasos. Se va cambiando el tamaño de la imagen progresivamente
-            w = img.getWidth();
-            h = img.getHeight();
-        } else {
-            //Se usa la técnica de un sólo paso, se escala la imagen directamente a su tamaño final
-            w = targetWidth;
-            h = targetHeight;
+        if (img.getWidth() > targetWidth || img.getHeight() > targetHeight) {
+            int w, h;
+            if (higherQuality) {
+                // Se usa la técnica de múltiples pasos. Se va cambiando el tamaño de la imagen progresivamente
+                w = img.getWidth();
+                h = img.getHeight();
+            } else {
+                //Se usa la técnica de un sólo paso, se escala la imagen directamente a su tamaño final
+                w = targetWidth;
+                h = targetHeight;
+            }
+            do {
+                if (higherQuality && w > targetWidth) {
+                    w /= 2;
+                    if (w < targetWidth) {
+                        w = targetWidth;
+                    }
+                }
+                if (higherQuality && h > targetHeight) {
+                    h /= 2;
+                    if (h < targetHeight) {
+                        h = targetHeight;
+                    }
+                }
+                BufferedImage tmp = new BufferedImage(w, h, type);
+                Graphics2D g2 = tmp.createGraphics();
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g2.drawImage(ret, 0, 0, w, h, null);
+                g2.dispose();
+                ret = tmp;
+            } while (w != targetWidth || h != targetHeight);
         }
-        do {
-            if (higherQuality && w > targetWidth) {
-                w /= 2;
-                if (w < targetWidth) {
-                    w = targetWidth;
-                }
-            }
-            if (higherQuality && h > targetHeight) {
-                h /= 2;
-                if (h < targetHeight) {
-                    h = targetHeight;
-                }
-            }
-            BufferedImage tmp = new BufferedImage(w, h, type);
-            Graphics2D g2 = tmp.createGraphics();
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2.drawImage(ret, 0, 0, w, h, null);
-            g2.dispose();
-            ret = tmp;
-        } while (w != targetWidth || h != targetHeight);
         return ret;
     }
 
