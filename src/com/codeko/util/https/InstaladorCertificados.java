@@ -13,23 +13,43 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import sun.net.www.protocol.https.DefaultHostnameVerifier;
 
 /**
  * Copyright Codeko Informática 2008
  * www.codeko.com
  * @author Codeko
  * Instala automáticamente un el certificado ssl de la url provista para que se puedan realizar conexiones a esa url.
+ * Más información en http://www.codeko.com/2010/04/codekolib-instaladorcertificados/
  */
 public class InstaladorCertificados {
+    /**
+     * HostnameVerifier para evitar errores a la hora de aceptar certificados de una url
+     * proporcionados por una url diferente
+     */
+    private static class NullHostnameVerifier implements HostnameVerifier {
 
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    }
     private static CodekoKeyStore keyStore = null;
 
+    /**
+     * Devuelve el CodekoKeyStore en uso.
+     * @see CodekoKeyStore
+     * @return CodekoKeyStore en uso por le instalador de certificados
+     */
     public static CodekoKeyStore getKeyStore() {
         if (keyStore == null) {
             setKeyStore(new CodekoKeyStore());
@@ -37,15 +57,61 @@ public class InstaladorCertificados {
         return keyStore;
     }
 
+    /**
+     * Asigna un CodekoKeyStore propio para que sea usado por el instalador de certificados
+     * @see CodekoKeyStore
+     * @param keyStore CodekoKeyStore a usar
+     */
     public static void setKeyStore(CodekoKeyStore keyStore) {
         InstaladorCertificados.keyStore = keyStore;
         keyStore.asignarComoSSLKeyStore();
     }
 
+    /**
+     * Permite asignar el KeyStore que se quiere que sea usado por el instalador de certificados
+     * @param archivoKeyStore File donde se encuentra el KeyStore
+     * @param claveKeyStore String con la clave de acceso al KeyStore
+     */
     public static void setKeyStore(File archivoKeyStore, String claveKeyStore) {
         setKeyStore(new CodekoKeyStore(archivoKeyStore, claveKeyStore));
     }
 
+    /**
+     * Deshabilita la verificación del hostName en los certificados a usar.
+     * Útil cuando se quiere forzar el uso de un certificado aunque la url de este
+     * sea distinta a la url de acceso.
+     */
+    public static void deshabilitarHostNameVerification(){
+        deshabilitarHostNameVerification(true);
+    }
+    /**
+     * Habilita la verificación del hostName de los certificados a usar.
+     * Con esta verificación habilitada si el dominio del certificado es diferente al
+     * de la url de acceso se lanzará una excepción.
+     */
+    public static void habilitarHostNameVerification(){
+        deshabilitarHostNameVerification(false);
+    }
+
+    /**
+     * Permite habilitar o deshabilitar la verificación del dominio en los certificados SSL.
+     * @param deshabilitar boolean true para deshabilitar la verificación, false para habilitarla.
+     * @see InstaladorCertificados#deshabilitarHostNameVerification
+     * @see InstaladorCertificados#habilitarHostNameVerification
+     */
+    public static void deshabilitarHostNameVerification(boolean deshabilitar) {
+        if (deshabilitar) {
+            HttpsURLConnection.setDefaultHostnameVerifier(new NullHostnameVerifier());
+        } else {
+            HttpsURLConnection.setDefaultHostnameVerifier(new DefaultHostnameVerifier());
+        }
+    }
+
+    /**
+     * Permite instalar el certificado SSL de una url. Si la url no es https esta función no hace nada.
+     * @param host String con la url desde la que se instalará el certificado.
+     * @return boolean true si la instalación se ha realizado con éxito false si no.
+     */
     public static boolean instalar(String host) {
         try {
             instalar(host, 443);
@@ -55,7 +121,11 @@ public class InstaladorCertificados {
             return false;
         }
     }
-
+     /**
+     * Permite instalar el certificado SSL de una url. Si la url no es https esta función no hace nada.
+     * @param host URL con la url desde la que se instalará el certificado.
+     * @return boolean true si la instalación se ha realizado con éxito false si no.
+     */
     public static boolean instalar(URL url) {
         try {
             int port = url.getPort();
