@@ -73,8 +73,8 @@ public class Provincias {
     }
     /**
      * Recupera el nombre de una provincia según el código de esta.
-     * @param cod
-     * @return
+     * @param cod int con el código de la provincia
+     * @return String con el nombre de la provincia
      */
     public static String getProvincia(int cod) {
         return getProvincias().get(cod);
@@ -82,8 +82,8 @@ public class Provincias {
 
     /**
      * Recupera el nombre de la provincia a la que pertenece un código postal.
-     * @param cp
-     * @return
+     * @param cp String con cualquier código postal
+     * @return String con el nombre de lap provincia a la que pertenece el código postal indicado.
      */
     public static String getProvincia(String cp) {
         int cod = Num.getInt((cp.trim()+"  ").substring(0, 2));

@@ -144,7 +144,6 @@ public class Archivo {
      * Si la urls es HTTPS la función se encarga de isntalar y autorizar el ceritificado automáticamente mediante la clase InstaladorCertificados.<br/>
      * Esta función hace uso de la configuración de isIgnorarErroresSSL() para ignorar o no los errores de validación SSL.
      * @param archivo URL a leer
-     * @param charset Codificación del archivo
      * @return String con el contenido del archivo
      * @throws java.io.IOException Si se encuentra algún error accediendo a la URL
      * @see InstaladorCertificados

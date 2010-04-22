@@ -123,7 +123,7 @@ public class InstaladorCertificados {
     }
      /**
      * Permite instalar el certificado SSL de una url. Si la url no es https esta función no hace nada.
-     * @param host URL con la url desde la que se instalará el certificado.
+     * @param url URL con la url desde la que se instalará el certificado.
      * @return boolean true si la instalación se ha realizado con éxito false si no.
      */
     public static boolean instalar(URL url) {
