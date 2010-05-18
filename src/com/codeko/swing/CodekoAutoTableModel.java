@@ -20,6 +20,15 @@ public class CodekoAutoTableModel<T> extends javax.swing.table.DefaultTableModel
     Class claseModelo = null;
     Vector<T> datos = null;
     Vector<ObjCdkAutoCol> defs = null;
+    boolean editable = true;
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
 
     public CodekoAutoTableModel(Class claseModelo) {
         super();
@@ -112,13 +121,13 @@ public class CodekoAutoTableModel<T> extends javax.swing.table.DefaultTableModel
         boolean addSinAnotacion = true;
         @SuppressWarnings(value = "unchecked")
         CdkAutoTabla ta = (CdkAutoTabla) clase.getAnnotation(CdkAutoTabla.class);
-        short editable = CdkAutoTabla.EDITABLE_AUTO;
+        short cEditable = CdkAutoTabla.EDITABLE_AUTO;
         boolean autoTitulos = true;
         if (ta != null) {
             if (ta.procesarPadre()) {
                 procesarClase(clase.getSuperclass());
             }
-            editable = ta.editable();
+            cEditable = ta.editable();
             switch (ta.editable()) {
                 case CdkAutoTabla.EDITABLE_NO:
                     editablePorDefecto = false;
@@ -158,7 +167,7 @@ public class CodekoAutoTableModel<T> extends javax.swing.table.DefaultTableModel
                                 break;
                             default:
                                 //por defecto le asignamos el del
-                                switch (editable) {
+                                switch (cEditable) {
                                     case CdkAutoTabla.EDITABLE_NO:
                                         editableCampo = false;
                                         break;
@@ -174,7 +183,7 @@ public class CodekoAutoTableModel<T> extends javax.swing.table.DefaultTableModel
                         def.setCampo(attr[i].getName());
                         getDefs().add(def);
                     }
-                } else if(addSinAnotacion) {
+                } else if (addSinAnotacion) {
                     if (autoTitulos) {
                         def.setTitulo(getAutoTitulo(attr[i].getName()));
                     } else {
@@ -398,6 +407,9 @@ public class CodekoAutoTableModel<T> extends javax.swing.table.DefaultTableModel
     @Override
     @SuppressWarnings("unchecked")
     public boolean isCellEditable(int row, int column) {
+        if (!isEditable()) {
+            return false;
+        }
         if (getDefs().get(column).getEditable() == null) {
             String campo = getDefs().elementAt(column).getCampo();
             String set = "set" + campo.substring(0, 1).toUpperCase() + campo.substring(1);

@@ -12,11 +12,21 @@ public class CodekoTableModel<T extends IObjetoTabla> extends javax.swing.table.
 
     IObjetoTabla objetoModelo = null;
     Vector<T> datos = null;
+    boolean editable = true;
 
     public CodekoTableModel(T modelo) {
         super();
         setObjetoModelo(modelo);
     }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
     /**
      * Usado SOLO para enlazar el vector de datos con un vecto externo
      * @param datos
@@ -118,7 +128,11 @@ public class CodekoTableModel<T extends IObjetoTabla> extends javax.swing.table.
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        return getElemento(row).esCampoEditable(column);
+        if (isEditable()) {
+            return getElemento(row).esCampoEditable(column);
+        } else {
+            return false;
+        }
     }
 
     @Override

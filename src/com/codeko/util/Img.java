@@ -125,7 +125,7 @@ public class Img {
                 g2.drawImage(ret, 0, 0, w, h, null);
                 g2.dispose();
                 ret = tmp;
-            } while (w != targetWidth || h != targetHeight);
+            } while (w != targetWidth && h != targetHeight);
         }
         return ret;
     }

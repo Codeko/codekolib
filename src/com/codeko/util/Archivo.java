@@ -707,4 +707,41 @@ public class Archivo {
     public static File getUltimoArchivoUsado(Object aplicacion, String etiqueta) {
         return new File(Preferences.userNodeForPackage(aplicacion.getClass()).get(etiqueta, System.getProperty("user.dir")));
     }
+
+    /**
+     * Limpia una cadena de texto eliminando los caracteres ilegales o problemáticos en las mayoría de
+     * sistemas. La función convierte algunos caracteres a su versión no problemática (quita acentos, dieresis, etc)
+     * y posteriormente convierte cualquier caracter que no sea de palabra (\W en expresión regular) en un _
+     * @param nombre String con el nombre a limpiar
+     * @return String con la cadena limpia de caracteres ilegales o problemáticos
+     */
+    public static String limpiarParaArchivo(String nombre){
+        String ret=nombre;
+        ret=ret.replaceAll("ñ", "n");
+        ret=ret.replaceAll("á", "a");
+        ret=ret.replaceAll("é", "e");
+        ret=ret.replaceAll("í", "i");
+        ret=ret.replaceAll("ó", "o");
+        ret=ret.replaceAll("ú", "u");
+        ret=ret.replaceAll("Ñ", "N");
+        ret=ret.replaceAll("Á", "A");
+        ret=ret.replaceAll("É", "E");
+        ret=ret.replaceAll("Í", "I");
+        ret=ret.replaceAll("Ó", "O");
+        ret=ret.replaceAll("Ú", "U");
+        ret=ret.replaceAll("ä", "a");
+        ret=ret.replaceAll("ë", "e");
+        ret=ret.replaceAll("ï", "i");
+        ret=ret.replaceAll("ö", "o");
+        ret=ret.replaceAll("ü", "u");
+        ret=ret.replaceAll("Ä", "A");
+        ret=ret.replaceAll("Ë", "E");
+        ret=ret.replaceAll("Ï", "I");
+        ret=ret.replaceAll("Ö", "O");
+        ret=ret.replaceAll("Ü", "U");
+        ret=ret.replaceAll("Ç", "C");
+        ret=ret.replaceAll("ç", "c");
+        ret=ret.replaceAll("(\\W)", "_");
+        return ret;
+    }
 }
